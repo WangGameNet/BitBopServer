@@ -1,0 +1,85 @@
+buildscript {
+    repositories {
+        maven { url 'https://jitpack.io' }
+        maven {
+            url 'https://maven.aliyun.com/repository/central'
+            name 'central'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/jcenter'
+            name 'jcenter'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/google'
+            name 'Google'
+        }
+        google()
+        jcenter()
+
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+    }
+}
+
+allprojects {
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+
+    version = '1.0'
+    ext {
+        appName = "PacMan_libGdx"
+        gdxVersion = '1.9.1'
+        roboVMVersion = '1.13.0'
+        box2DLightsVersion = '1.4'
+        ashleyVersion = '1.7.1'
+        aiVersion = '1.8.0'
+    }
+
+    repositories {
+        maven { url 'https://jitpack.io' }
+        maven {
+            url 'https://maven.aliyun.com/repository/central'
+            name 'central'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/jcenter'
+            name 'jcenter'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/google'
+            name 'Google'
+        }
+        google()
+        jcenter()
+
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java"
+
+
+    dependencies {
+        compile project(":core")
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    }
+}
+project(":core") {
+    apply plugin: "java"
+
+
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+        // libGdx源码
+        implementation 'com.github.wangGame.LibGdxTool:libGdx:release1.0.1'
+        //自己的工具包
+        implementation 'com.github.wangGame.LibGdxTool:libGdxLib:release1.0.1'
+    }
+}
