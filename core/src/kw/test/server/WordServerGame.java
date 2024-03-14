@@ -3,10 +3,10 @@ package kw.test.server;
 import com.badlogic.gdx.Game;
 
 public class WordServerGame extends Game {
-
+    WorldServer server;
     @Override
     public void create() {
-        WorldServer server = new WorldServer();
+        server = new WorldServer();
     }
 
     @Override
@@ -18,5 +18,11 @@ public class WordServerGame extends Game {
     @Override
     public void dispose() {
         super.dispose();
+    }
+
+    @Override
+    public void render() {
+        super.render();
+        server.update();
     }
 }
