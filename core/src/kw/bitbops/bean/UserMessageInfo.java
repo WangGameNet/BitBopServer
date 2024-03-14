@@ -1,12 +1,12 @@
-package kw.test.bean;
+package kw.bitbops.bean;
 
 import com.esotericsoftware.kryonet.Connection;
 
-public class TypeUserMessage {
+public class UserMessageInfo {
     private Connection connection;
     private Object object;
 
-    public TypeUserMessage(Connection connection, Object object) {
+    public UserMessageInfo(Connection connection, Object object) {
         this.connection = connection;
         this.object = object;
     }
