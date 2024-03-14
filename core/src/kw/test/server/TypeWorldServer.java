@@ -9,16 +9,16 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import kw.test.bean.UserMessage;
+import kw.test.bean.TypeUserMessage;
 
-public class WorldServer {
+public class TypeWorldServer {
     private static final int TCP_PORT = 1234;
     private static final int UDP_PORT = 1235;
     private Server server;
-    private Queue<UserMessage> queue;
+    private Queue<TypeUserMessage> queue;
     private Array<Connection> connections;
 
-    public WorldServer (){
+    public TypeWorldServer(){
         this.connections = new Array<>();
         this.server = new Server();
         this.queue = new LinkedList<>();
@@ -29,18 +29,20 @@ public class WorldServer {
             public void connected(Connection connection) {
                 super.connected(connection);
                 connections.add(connection);
+                System.out.println(connection.getID()+"--- connected");
             }
 
             @Override
             public void received(Connection connection, Object object) {
-                System.out.println("server ----- client connect or send");
-                queue.add(new UserMessage(connection,object));
+
+                queue.add(new TypeUserMessage(connection,object));
             }
 
             @Override
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
                 connections.removeValue(connection,false);
+                System.out.println(connection.getID()+"--- connected");
             }
         });
 
@@ -57,7 +59,7 @@ public class WorldServer {
             return;
         }
         for (int i = 0; i < queue.size(); i++) {
-            UserMessage poll = queue.poll();
+            TypeUserMessage poll = queue.poll();
             Object object = poll.getObject();
             if (object instanceof String){
                 System.out.println((String)(object));

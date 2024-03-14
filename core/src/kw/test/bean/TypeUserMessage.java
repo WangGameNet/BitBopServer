@@ -2,11 +2,11 @@ package kw.test.bean;
 
 import com.esotericsoftware.kryonet.Connection;
 
-public class UserMessage {
+public class TypeUserMessage {
     private Connection connection;
     private Object object;
 
-    public UserMessage(Connection connection, Object object) {
+    public TypeUserMessage(Connection connection, Object object) {
         this.connection = connection;
         this.object = object;
     }

@@ -2,11 +2,11 @@ package kw.test.server;
 
 import com.badlogic.gdx.Game;
 
-public class WordServerGame extends Game {
-    WorldServer server;
+public class TypeWordServerGame extends Game {
+    TypeWorldServer server;
     @Override
     public void create() {
-        server = new WorldServer();
+        server = new TypeWorldServer();
     }
 
     @Override
