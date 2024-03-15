@@ -9,15 +9,21 @@ import kw.bitbops.server.BitBopsServer;
 public class BitbopsGame extends Game {
     public static BitBopsServer server;
 
-
     @Override
     public void create() {
         server = new BitBopsServer();
+
     }
 
     @Override
     public void render() {
         server.update();
+        updateGameInfo();
         super.render();
+    }
+
+    private void updateGameInfo() {
+        //钉子移动
+
     }
 }

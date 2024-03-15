@@ -10,31 +10,43 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import kw.bitbops.GameLogic;
 import kw.bitbops.bean.UserInfo;
 import kw.bitbops.bean.UserMessageInfo;
-import kw.bitbops.manager.BitBopManager;
+import kw.bitbops.message.DingStatusMessage;
 import kw.bitbops.message.EnterMessage;
 import kw.bitbops.message.ExitMessage;
+import kw.bitbops.message.GameStateMessage;
 import kw.bitbops.message.HelloMessage;
+import kw.bitbops.message.HitDingMessage;
+import kw.bitbops.message.OutDingMessage;
 
 public class BitBopsServer {
     private static final int TCP_PORT = 1234;
     private static final int UDP_PORT = 1235;
     private Queue<UserInfo> userInfoBeanArray;
     private Queue<UserMessageInfo> userMessageArray;
-    private Array<UserInfo> plays;
+    private Array<Connection> lostConnect;
     private Server server;
-    private BitBopManager bitBopManager;
     private int userId = 0;
+    private GameLogic logic;
+
     public BitBopsServer(){
+        this.logic = new GameLogic();
         this.userInfoBeanArray = new LinkedList<>();
         this.userMessageArray = new LinkedList<>();
-        this.plays = new Array<>();
+        this.lostConnect = new Array<>();
         this.server = new Server();
         this.server.getKryo().register(float[].class);
         this.server.getKryo().register(EnterMessage.class);
         this.server.getKryo().register(ExitMessage.class);
         this.server.getKryo().register(HelloMessage.class);
+        this.server.getKryo().register(HitDingMessage.class);
+        this.server.getKryo().register(OutDingMessage.class);
+        this.server.getKryo().register(GameStateMessage.class);
+        this.server.getKryo().register(Object[].class);
+        this.server.getKryo().register(Array.class);
+
         this.server.addListener(new Listener(){
             @Override
             public void received(Connection connection, Object object) {
@@ -45,25 +57,9 @@ public class BitBopsServer {
             @Override
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("delete user info discored--------------");
-                        UserInfo temp = null;
-                        for (UserInfo userMessageInfo : userInfoBeanArray) {
-                            if (userMessageInfo.getConnection() == connection) {
-                                temp = userMessageInfo;
-                                break;
-                            }
-                        }
-                        if (temp != null){
-                            userInfoBeanArray.remove(temp);
-                        }
-                    }
-                });
+                lostConnect.add(connection);
             }
         });
-
         server.start();
         try {
             server.bind(TCP_PORT,UDP_PORT);
@@ -73,37 +69,80 @@ public class BitBopsServer {
     }
 
     public void update() {
-        parseMessage();
-    }
-
-    public void parseMessage(){
         for (int i = 0; i < userMessageArray.size(); i++) {
             UserMessageInfo userMessageInfo = userMessageArray.poll();
             Object object = userMessageInfo.getObject();
             if (object instanceof EnterMessage){
-                EnterMessage object1 = (EnterMessage) object;
-                object1.setId(userId++);
-                userInfoBeanArray.add(new UserInfo(userMessageInfo.getConnection(),object1.getId()));
-                System.out.println("add userinfo -----------------");
-                HelloMessage m = new HelloMessage();
-                m.setId(object1.getId());
-                m.setMsg("你的序号为："+m.getId());
-                sendUDP(userMessageInfo.getConnection(),m);
+                dealEnterMessage(userMessageInfo, (EnterMessage) object);
+
             }else if (object instanceof ExitMessage){
-                ExitMessage object1 = (ExitMessage) object;
-                int id = object1.getId();
-                UserInfo info = null;
-                for (UserInfo userInfo : userInfoBeanArray) {
-                    int id1 = userInfo.getId();
-                    if(id == id1){
-                        info = userInfo;
-                        break;
-                    }
-                }
-                System.out.println("delete userinfo -----------------");
-                userInfoBeanArray.remove(info);
+                dealExitMessage((ExitMessage) object);
+
+            }else if (object instanceof HitDingMessage){
+                dealHitDingMessage((HitDingMessage)object);
+
+            }else if (object instanceof OutDingMessage){
+                dealOutDingMessage((OutDingMessage)object);
+
             }
         }
+
+        UserInfo temp = null;
+        for (Connection connection : lostConnect) {
+            for (UserInfo info : userInfoBeanArray) {
+                if (info.getConnection() == connection) {
+                    temp = info;
+                    break;
+                }
+            }
+        }
+        userInfoBeanArray.remove(temp);
+        //move
+        logic.update(Gdx.graphics.getDeltaTime());
+        Array<DingStatusMessage> array = logic.genSendMessage();
+        for (UserInfo info : userInfoBeanArray) {
+            sendUDP(info.getConnection(),array);
+        }
+    }
+
+    private void dealOutDingMessage(OutDingMessage object) {
+        System.out.println("user out ding ---------");
+        logic.outDing();
+        for (UserInfo info : userInfoBeanArray) {
+            sendUDP(info.getConnection(),object);
+        }
+    }
+
+    private void dealHitDingMessage(HitDingMessage object) {
+        System.out.println("user hit ding ---------");
+        logic.hitDing();
+        for (UserInfo info : userInfoBeanArray) {
+            sendUDP(info.getConnection(),object);
+        }
+    }
+
+    private void dealExitMessage(ExitMessage object) {
+        ExitMessage exitMessage = object;
+        int id = exitMessage.getId();
+        UserInfo info = null;
+        for (UserInfo userInfo : userInfoBeanArray) {
+            int id1 = userInfo.getId();
+            if(id == id1){
+                info = userInfo;
+                break;
+            }
+        }
+        userInfoBeanArray.remove(info);
+    }
+
+    private void dealEnterMessage(UserMessageInfo userMessageInfo, EnterMessage object) {
+        EnterMessage enterMessage = object;
+        enterMessage.setId(userId++);
+        userInfoBeanArray.add(new UserInfo(userMessageInfo.getConnection(),enterMessage.getId()));
+        HelloMessage helloMessage = new HelloMessage();
+        helloMessage.setId(enterMessage.getId());
+        helloMessage.setMsg("你的序号为："+helloMessage.getId());
+        sendUDP(userMessageInfo.getConnection(),helloMessage);
     }
 
     private void sendUDP(Connection connection, Object object) {
