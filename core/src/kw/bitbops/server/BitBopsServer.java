@@ -11,12 +11,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import kw.bitbops.GameLogic;
+import kw.bitbops.bean.DingBean;
 import kw.bitbops.bean.UserInfo;
 import kw.bitbops.bean.UserMessageInfo;
 import kw.bitbops.message.DingStatusMessage;
 import kw.bitbops.message.EnterMessage;
 import kw.bitbops.message.ExitMessage;
-import kw.bitbops.message.GameStateMessage;
 import kw.bitbops.message.HelloMessage;
 import kw.bitbops.message.HitDingMessage;
 import kw.bitbops.message.OutDingMessage;
@@ -43,7 +43,7 @@ public class BitBopsServer {
         this.server.getKryo().register(HelloMessage.class);
         this.server.getKryo().register(HitDingMessage.class);
         this.server.getKryo().register(OutDingMessage.class);
-        this.server.getKryo().register(GameStateMessage.class);
+        this.server.getKryo().register(DingStatusMessage.class);
         this.server.getKryo().register(Object[].class);
         this.server.getKryo().register(Array.class);
 
@@ -107,7 +107,10 @@ public class BitBopsServer {
 
     private void dealOutDingMessage(OutDingMessage object) {
         System.out.println("user out ding ---------");
-        logic.outDing();
+        DingBean dingBean = logic.outDing();
+        object.setId(dingBean.getDingId());
+        object.setPox(dingBean.getPox());
+        object.setPoy(dingBean.getPoY());
         for (UserInfo info : userInfoBeanArray) {
             sendUDP(info.getConnection(),object);
         }

@@ -37,7 +37,7 @@ public class DingBean {
     }
 
     public void move(float delta) {
-        this.pox = pox + delta * 10;
+        this.pox = pox + delta * 100;
     }
 
     public int getStatus() {

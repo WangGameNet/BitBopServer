@@ -11,24 +11,26 @@ import kw.bitbops.message.DingStatusMessage;
 import kw.bitbops.server.BitBopsServer;
 
 public class GameLogic {
-    private int  dingIndex;
+    private int dingIndex;
     private Array<DingBean> dingBeanArray;
     private Vector2 start;
 
     public GameLogic(){
         this.dingBeanArray = new Array<>();
-        start = new Vector2();
-
+        start = new Vector2(400,500);
     }
 
-    public void outDing(){
-        dingBeanArray.add(new DingBean(dingIndex,0,0));
+    public DingBean outDing(){
+        DingBean dingBean = new DingBean(dingIndex++, 0, 0);
+        dingBeanArray.add(dingBean);
+        return dingBean;
     }
 
     public void hitDing(){
         for (DingBean dingBean : dingBeanArray) {
             if (dingBean.getPox()> start.x && dingBean.getPox()<start.y) {
                 //发送
+                dingBean.setStatus(3);
             }
         }
     }
