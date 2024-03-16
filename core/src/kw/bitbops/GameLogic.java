@@ -13,11 +13,15 @@ import kw.bitbops.server.BitBopsServer;
 public class GameLogic {
     private int dingIndex;
     private Array<DingBean> dingBeanArray;
-    private Vector2 start;
-
+    private Vector2 good;
+    private Vector2 left;
+    private Vector2 right;
+    private float offSex = 10;
     public GameLogic(){
         this.dingBeanArray = new Array<>();
-        start = new Vector2(400,500);
+        good = new Vector2(705-offSex,735-offSex);
+        left = new Vector2(735-offSex,770-offSex);
+        right = new Vector2(770-offSex,800-offSex);
     }
 
     public DingBean outDing(){
@@ -28,16 +32,28 @@ public class GameLogic {
 
     public void hitDing(){
         for (DingBean dingBean : dingBeanArray) {
-            if (dingBean.getPox()> start.x && dingBean.getPox()<start.y) {
-                //发送
-                dingBean.setStatus(3);
+            if (dingBean.getStatus() == 0) {
+                if (dingBean.getPox() >= good.x && dingBean.getPox() <= good.y) {
+                    //发送
+                    dingBean.setStatus(3);
+                } else if (dingBean.getPox() >= left.x && dingBean.getPox() <= left.y) {
+                    dingBean.setStatus(1);
+                } else if (dingBean.getPox() >= right.x && dingBean.getPox() <= right.y) {
+                    dingBean.setStatus(2);
+                }
             }
         }
     }
 
-    public void update(float delta){
+
+    Array<DingBean> arraytemp = new Array<>();
+    public void update(float delta) {
+        arraytemp.clear();
         for (DingBean dingBean : dingBeanArray) {
             dingBean.move(delta);
+            if (dingBean.getStatus() == 4) {
+                arraytemp.add(dingBean);
+            }
         }
     }
 
@@ -52,5 +68,11 @@ public class GameLogic {
             array.add(message);
         }
         return array;
+    }
+
+    public void removeUnless() {
+        for (DingBean dingBean : arraytemp) {
+            dingBeanArray.removeValue(dingBean,false);
+        }
     }
 }

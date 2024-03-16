@@ -103,6 +103,7 @@ public class BitBopsServer {
         for (UserInfo info : userInfoBeanArray) {
             sendUDP(info.getConnection(),array);
         }
+        logic.removeUnless();
     }
 
     private void dealOutDingMessage(OutDingMessage object) {

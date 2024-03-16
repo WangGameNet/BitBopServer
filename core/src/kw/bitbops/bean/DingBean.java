@@ -4,7 +4,7 @@ public class DingBean {
     private int dingId;
     private float pox;
     private float poY;
-    private int status;  //0 直立  1.左歪  2.右歪 3，打中
+    private int status;  //0 直立  1.左歪  2.右歪 3，打中 ,4 死亡
 
     public DingBean(int dingId, float pox, float poY) {
         this.dingId = dingId;
@@ -37,7 +37,10 @@ public class DingBean {
     }
 
     public void move(float delta) {
-        this.pox = pox + delta * 100;
+        this.pox = pox + delta * 200;
+        if (pox>1200){
+            setStatus(4);
+        }
     }
 
     public int getStatus() {
