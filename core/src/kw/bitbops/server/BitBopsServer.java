@@ -17,6 +17,8 @@ import kw.bitbops.bean.DingBean;
 import kw.bitbops.bean.RoomInfo;
 import kw.bitbops.bean.UserInfo;
 import kw.bitbops.bean.UserMessageInfo;
+import kw.bitbops.deal.BaseMessageDeal;
+import kw.bitbops.message.BaseMessage;
 import kw.bitbops.message.CreateRoomMessage;
 import kw.bitbops.message.DingStatusMessage;
 import kw.bitbops.message.EnterMessage;
@@ -29,20 +31,14 @@ import kw.bitbops.message.RoomListMessage;
 public class BitBopsServer {
     private static final int TCP_PORT = 1234;
     private static final int UDP_PORT = 1235;
-    private Queue<UserInfo> userInfoBeanArray;
+    private Server server;
     private Queue<UserMessageInfo> userMessageArray;
     private Array<Connection> lostConnect;
-    private Server server;
-    private int userId = 0;
-    private GameLogic logic;
-    private ArrayMap<String,RoomInfo> roomMap;
+
 
     public BitBopsServer(){
-        this.logic = new GameLogic();
-        this.userInfoBeanArray = new LinkedList<>();
-        this.userMessageArray = new LinkedList<>();
-        this.roomMap = new ArrayMap<>();
         this.lostConnect = new Array<>();
+        this.userMessageArray = new LinkedList<>();
         this.server = new Server();
         this.server.getKryo().register(float[].class);
         this.server.getKryo().register(EnterMessage.class);
@@ -77,107 +73,44 @@ public class BitBopsServer {
         }
     }
 
+    private BaseMessageDeal<BaseMessage> baseMessageDeal;
+
+    public void setBaseMessageDeal(BaseMessageDeal<BaseMessage> baseMessageDeal) {
+        this.baseMessageDeal = baseMessageDeal;
+    }
+
     public void update() {
         for (int i = 0; i < userMessageArray.size(); i++) {
             UserMessageInfo userMessageInfo = userMessageArray.poll();
             Object object = userMessageInfo.getObject();
-            if (object instanceof EnterMessage){
-                dealEnterMessage(userMessageInfo, (EnterMessage) object);
 
-            }else if (object instanceof ExitMessage){
-                dealExitMessage((ExitMessage) object);
-
-            }else if (object instanceof HitDingMessage){
-                dealHitDingMessage((HitDingMessage)object);
-
-            }else if (object instanceof OutDingMessage){
-                dealOutDingMessage((OutDingMessage)object);
-
-            }else if (object instanceof CreateRoomMessage){
-                dealCreateRoom((CreateRoomMessage) object,userMessageInfo.getConnection());
+            if (baseMessageDeal == null) {
+                baseMessageDeal = new BaseMessageDeal<>();
+            }
+            if (object instanceof BaseMessage){
+                baseMessageDeal.deal((BaseMessage) object,userMessageInfo);
             }
         }
 
-        UserInfo temp = null;
-        for (Connection connection : lostConnect) {
-            for (UserInfo info : userInfoBeanArray) {
-                if (info.getConnection() == connection) {
-                    temp = info;
-                    break;
-                }
-            }
-        }
-        userInfoBeanArray.remove(temp);
-        //move
-        logic.update(Gdx.graphics.getDeltaTime());
-        Array<DingStatusMessage> array = logic.genSendMessage();
-        for (UserInfo info : userInfoBeanArray) {
-            sendUDP(info.getConnection(),array);
-        }
-        logic.removeUnless();
+//        UserInfo temp = null;
+//        for (Connection connection : lostConnect) {
+//            for (UserInfo info : userInfoBeanArray) {
+//                if (info.getConnection() == connection) {
+//                    temp = info;
+//                    break;
+//                }
+//            }
+//        }
+//        userInfoBeanArray.remove(temp);
+//        //move
+//        logic.update(Gdx.graphics.getDeltaTime());
+//        Array<DingStatusMessage> array = logic.genSendMessage();
+//        for (UserInfo info : userInfoBeanArray) {
+//            sendUDP(info.getConnection(),array);
+//        }
+//        logic.removeUnless();
     }
 
-    private void dealCreateRoom(CreateRoomMessage object, Connection connection) {
-        RoomInfo info = new RoomInfo();
-        info.setRoomName(object.getName());
-        info.setAdmin(connection.getID());
-        roomMap.put(object.getId(),info);
-        sendUDP(connection,info);
-
-        RoomListMessage roomListMessage = new RoomListMessage();
-        for (ObjectMap.Entry<String, RoomInfo> stringRoomInfoEntry : roomMap) {
-            RoomInfo value = stringRoomInfoEntry.value;
-            roomListMessage.addRoomInfo(value);
-        }
-        for (UserInfo userMessageInfo : userInfoBeanArray) {
-            Connection connection1 = userMessageInfo.getConnection();
-            System.out.println("fasong liebiao");
-            sendUDP(connection1,roomListMessage);
-        }
-    }
-
-    private void dealOutDingMessage(OutDingMessage object) {
-        System.out.println("user out ding ---------");
-        DingBean dingBean = logic.outDing();
-        object.setId(dingBean.getDingId());
-        object.setPox(dingBean.getPox());
-        object.setPoy(dingBean.getPoY());
-        for (UserInfo info : userInfoBeanArray) {
-            sendUDP(info.getConnection(),object);
-        }
-    }
-
-    private void dealHitDingMessage(HitDingMessage object) {
-        System.out.println("user hit ding ---------");
-        logic.hitDing();
-        for (UserInfo info : userInfoBeanArray) {
-            sendUDP(info.getConnection(),object);
-        }
-    }
-
-    private void dealExitMessage(ExitMessage object) {
-        ExitMessage exitMessage = object;
-        int id = exitMessage.getId();
-        UserInfo info = null;
-        for (UserInfo userInfo : userInfoBeanArray) {
-            int id1 = userInfo.getId();
-            if(id == id1){
-                info = userInfo;
-                break;
-            }
-        }
-        userInfoBeanArray.remove(info);
-    }
-
-    private void dealEnterMessage(UserMessageInfo userMessageInfo, EnterMessage object) {
-        EnterMessage enterMessage = object;
-        enterMessage.setId(userId++);
-        userInfoBeanArray.add(new UserInfo(userMessageInfo.getConnection(),enterMessage.getId()));
-        HelloMessage helloMessage = new HelloMessage();
-        helloMessage.setId(enterMessage.getId());
-        helloMessage.setMsg("你的序号为："+helloMessage.getId());
-        sendUDP(userMessageInfo.getConnection(),helloMessage);
-    }
 
     private void sendUDP(Connection connection, Object object) {
         server.sendToUDP(connection.getID(),object);
