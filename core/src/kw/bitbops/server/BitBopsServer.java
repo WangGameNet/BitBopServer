@@ -2,6 +2,8 @@ package kw.bitbops.server;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -12,14 +14,17 @@ import java.util.Queue;
 
 import kw.bitbops.GameLogic;
 import kw.bitbops.bean.DingBean;
+import kw.bitbops.bean.RoomInfo;
 import kw.bitbops.bean.UserInfo;
 import kw.bitbops.bean.UserMessageInfo;
+import kw.bitbops.message.CreateRoomMessage;
 import kw.bitbops.message.DingStatusMessage;
 import kw.bitbops.message.EnterMessage;
 import kw.bitbops.message.ExitMessage;
 import kw.bitbops.message.HelloMessage;
 import kw.bitbops.message.HitDingMessage;
 import kw.bitbops.message.OutDingMessage;
+import kw.bitbops.message.RoomListMessage;
 
 public class BitBopsServer {
     private static final int TCP_PORT = 1234;
@@ -30,11 +35,13 @@ public class BitBopsServer {
     private Server server;
     private int userId = 0;
     private GameLogic logic;
+    private ArrayMap<String,RoomInfo> roomMap;
 
     public BitBopsServer(){
         this.logic = new GameLogic();
         this.userInfoBeanArray = new LinkedList<>();
         this.userMessageArray = new LinkedList<>();
+        this.roomMap = new ArrayMap<>();
         this.lostConnect = new Array<>();
         this.server = new Server();
         this.server.getKryo().register(float[].class);
@@ -46,7 +53,9 @@ public class BitBopsServer {
         this.server.getKryo().register(DingStatusMessage.class);
         this.server.getKryo().register(Object[].class);
         this.server.getKryo().register(Array.class);
-
+        this.server.getKryo().register(CreateRoomMessage.class);
+        this.server.getKryo().register(RoomInfo.class);
+        this.server.getKryo().register(RoomListMessage.class);
         this.server.addListener(new Listener(){
             @Override
             public void received(Connection connection, Object object) {
@@ -84,6 +93,8 @@ public class BitBopsServer {
             }else if (object instanceof OutDingMessage){
                 dealOutDingMessage((OutDingMessage)object);
 
+            }else if (object instanceof CreateRoomMessage){
+                dealCreateRoom((CreateRoomMessage) object,userMessageInfo.getConnection());
             }
         }
 
@@ -104,6 +115,25 @@ public class BitBopsServer {
             sendUDP(info.getConnection(),array);
         }
         logic.removeUnless();
+    }
+
+    private void dealCreateRoom(CreateRoomMessage object, Connection connection) {
+        RoomInfo info = new RoomInfo();
+        info.setRoomName(object.getName());
+        info.setAdmin(connection.getID());
+        roomMap.put(object.getId(),info);
+        sendUDP(connection,info);
+
+        RoomListMessage roomListMessage = new RoomListMessage();
+        for (ObjectMap.Entry<String, RoomInfo> stringRoomInfoEntry : roomMap) {
+            RoomInfo value = stringRoomInfoEntry.value;
+            roomListMessage.addRoomInfo(value);
+        }
+        for (UserInfo userMessageInfo : userInfoBeanArray) {
+            Connection connection1 = userMessageInfo.getConnection();
+            System.out.println("fasong liebiao");
+            sendUDP(connection1,roomListMessage);
+        }
     }
 
     private void dealOutDingMessage(OutDingMessage object) {
