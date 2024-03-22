@@ -12,7 +12,6 @@ public class BitbopsGame extends Game {
     @Override
     public void create() {
         server = new BitBopsServer();
-
     }
 
     @Override
