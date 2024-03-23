@@ -1,6 +1,6 @@
-package kw.bitbops.message;
+package kw.bitbops.listener.message;
 
-public class HelloMessage {
+public class HelloMessage extends BaseMessage{
     private int id;
     private String msg;
 

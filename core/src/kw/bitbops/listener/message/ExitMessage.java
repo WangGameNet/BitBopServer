@@ -1,4 +1,4 @@
-package kw.bitbops.message;
+package kw.bitbops.listener.message;
 
 public class ExitMessage {
     private int id;

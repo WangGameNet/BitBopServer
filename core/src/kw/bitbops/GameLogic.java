@@ -1,14 +1,10 @@
 package kw.bitbops;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.UUID;
-
 import kw.bitbops.bean.DingBean;
-import kw.bitbops.message.DingStatusMessage;
-import kw.bitbops.server.BitBopsServer;
+import kw.bitbops.listener.message.DingStatusMessage;
 
 public class GameLogic {
     private int dingIndex;

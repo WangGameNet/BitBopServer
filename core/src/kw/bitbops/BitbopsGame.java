@@ -1,28 +1,38 @@
 package kw.bitbops;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
-import com.kw.gdx.BaseGame;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
+import com.kw.gdx.utils.log.NLog;
 
+import kw.bitbops.bean.RoomInfo;
+import kw.bitbops.bean.UserInfo;
+import kw.bitbops.listener.abst.CreateRoomListener;
+import kw.bitbops.listener.abst.HelloMessageListener;
+import kw.bitbops.listener.abst.RoomListMessageListener;
 import kw.bitbops.server.BitBopsServer;
 
 public class BitbopsGame extends Game {
-    public static BitBopsServer server;
+    public BitBopsServer server;
+    private Array<UserInfo> connects;
+    private ArrayMap<Integer, RoomInfo> roomInfoMap;
+    public BitbopsGame(){
+        connects = new Array<>();
+        roomInfoMap = new ArrayMap<>();
+        NLog.isLog = true;
+    }
 
     @Override
     public void create() {
         server = new BitBopsServer();
+        server.addListener(new HelloMessageListener(connects));
+        server.addListener(new CreateRoomListener(roomInfoMap));
+        server.addListener(new RoomListMessageListener(roomInfoMap));
     }
 
     @Override
     public void render() {
         server.update();
-        updateGameInfo();
         super.render();
-    }
-
-    private void updateGameInfo() {
-        //钉子移动
-
     }
 }
