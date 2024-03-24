@@ -8,6 +8,8 @@ public class RoomInfo extends BaseMessage {
     private String roomName;
     private int admin;
     private int other;
+    private boolean active;
+    private boolean busy;
 
     public String getRoomName() {
         return roomName;
@@ -33,12 +35,30 @@ public class RoomInfo extends BaseMessage {
         this.other = other;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isBusy() {
+        return busy;
+    }
+
+    public void setBusy(boolean busy) {
+        this.busy = busy;
+    }
+
     @Override
     public String toString() {
         return "RoomInfo{" +
                 "roomName='" + roomName + '\'' +
                 ", admin=" + admin +
                 ", other=" + other +
+                ", active=" + active +
+                ", busy=" + busy +
                 '}';
     }
 }

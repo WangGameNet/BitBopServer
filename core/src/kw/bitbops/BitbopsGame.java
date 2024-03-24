@@ -7,6 +7,8 @@ import com.kw.gdx.utils.log.NLog;
 
 import kw.bitbops.bean.RoomInfo;
 import kw.bitbops.bean.UserInfo;
+import kw.bitbops.listener.abst.ActiveRoomMessageListener;
+import kw.bitbops.listener.abst.AddRoomListener;
 import kw.bitbops.listener.abst.CreateRoomListener;
 import kw.bitbops.listener.abst.HelloMessageListener;
 import kw.bitbops.listener.abst.RoomListMessageListener;
@@ -28,6 +30,8 @@ public class BitbopsGame extends Game {
         server.addListener(new HelloMessageListener(connects));
         server.addListener(new CreateRoomListener(roomInfoMap));
         server.addListener(new RoomListMessageListener(roomInfoMap));
+        server.addListener(new ActiveRoomMessageListener(roomInfoMap));
+        server.addListener(new AddRoomListener(roomInfoMap));
     }
 
     @Override
