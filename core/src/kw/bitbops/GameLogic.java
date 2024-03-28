@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import kw.bitbops.bean.DingBean;
-import kw.bitbops.listener.message.DingStatusMessage;
 
 public class GameLogic {
     private int dingIndex;
