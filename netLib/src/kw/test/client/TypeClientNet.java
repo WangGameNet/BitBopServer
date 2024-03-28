@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import kw.test.bean.BaseMessage;
 import kw.test.listener.AbstractListener;
 
 public class TypeClientNet {
@@ -16,6 +17,7 @@ public class TypeClientNet {
         client = new Client();
         // primitive arrays
         this.client.getKryo().register(float[].class);
+        this.client.getKryo().register(BaseMessage.class);
     }
 
     public void register(Class clazz){
