@@ -5,6 +5,15 @@ import kw.test.bean.BaseMessage;
 public class HelloMessage extends BaseMessage {
     private int id;
     private String msg;
+    private int code;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public int getId() {
         return id;
@@ -21,11 +30,13 @@ public class HelloMessage extends BaseMessage {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
     @Override
     public String toString() {
         return "HelloMessage{" +
                 "id=" + id +
                 ", msg='" + msg + '\'' +
+                ", code=" + code +
                 '}';
     }
 }

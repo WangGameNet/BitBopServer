@@ -4,12 +4,12 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.esotericsoftware.kryonet.Connection;
 import com.kw.gdx.utils.log.NLog;
 
-import kw.bitbops.bean.RoomInfo;
 import kw.bitbops.listener.message.AddRoomMessage;
+import kw.bitbops.listener.message.RoomInfoMessage;
 import kw.test.listener.AbstractListener;
 
 public class AddRoomListener extends AbstractListener<AddRoomMessage> {
-    public AddRoomListener(ArrayMap<Integer, RoomInfo> roomInfoMap) {
+    public AddRoomListener(ArrayMap<Integer, RoomInfoMessage> roomInfoMap) {
         super(AddRoomMessage.class);
     }
 

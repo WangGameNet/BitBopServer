@@ -28,6 +28,7 @@ public class HelloMessageListener extends ServerListener<HelloMessage> {
         HelloMessage message = new HelloMessage();
         message.setId(conncetion.getID());
         message.setMsg("注册成功！");
+        message.setCode(200);
         sendUdp(conncetion.getID(),message);
         NLog.i("register success :"+message.toString());
     }
