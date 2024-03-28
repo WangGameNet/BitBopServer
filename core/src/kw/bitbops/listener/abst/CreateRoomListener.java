@@ -7,6 +7,9 @@ import com.kw.gdx.utils.log.NLog;
 import kw.bitbops.bean.RoomInfo;
 import kw.test.listener.ServerListener;
 
+/**
+ * 用户创建房间
+ */
 public class CreateRoomListener extends ServerListener<RoomInfo> {
     private ArrayMap<Integer,RoomInfo> arrayMap;
     public CreateRoomListener(ArrayMap<Integer, RoomInfo> arrayMap) {

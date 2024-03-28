@@ -2,7 +2,7 @@ package kw.bitbops.bean;
 
 import kw.test.bean.BaseMessage;
 
-public class RoomInfo implements BaseMessage {
+public class RoomInfo extends BaseMessage {
     private String roomName;
     private int admin;
     private int other;

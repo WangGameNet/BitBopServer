@@ -9,6 +9,9 @@ import kw.bitbops.listener.message.RoomListMessage;
 import kw.test.listener.AbstractListener;
 import kw.test.listener.ServerListener;
 
+/**
+ * 响应用户获取房间列表请求
+ */
 public class RoomListMessageListener extends ServerListener<RoomListMessage> {
 
     private ArrayMap<Integer,RoomInfo> roomInfoArrayMap;

@@ -10,12 +10,14 @@ import kw.bitbops.bean.UserInfo;
 import kw.bitbops.listener.abst.ActiveRoomMessageListener;
 import kw.bitbops.listener.abst.AddRoomListener;
 import kw.bitbops.listener.abst.CreateRoomListener;
+import kw.bitbops.listener.abst.ExitMessageListener;
+import kw.bitbops.listener.abst.ExitRoomListener;
 import kw.bitbops.listener.abst.HelloMessageListener;
 import kw.bitbops.listener.abst.RoomListMessageListener;
-import kw.bitbops.server.BitBopsServer;
+import kw.test.server.TypeWorldServer;
 
 public class BitbopsGame extends Game {
-    public BitBopsServer server;
+    public TypeWorldServer server;
     private Array<UserInfo> connects;
     private ArrayMap<Integer, RoomInfo> roomInfoMap;
     public BitbopsGame(){
@@ -26,12 +28,15 @@ public class BitbopsGame extends Game {
 
     @Override
     public void create() {
-        server = new BitBopsServer();
+        server = TypeWorldServer.getTypeWorldServer();
+        server.serverStart();
         server.addListener(new HelloMessageListener(connects));
-        server.addListener(new CreateRoomListener(roomInfoMap));
-        server.addListener(new RoomListMessageListener(roomInfoMap));
-        server.addListener(new ActiveRoomMessageListener(roomInfoMap));
-        server.addListener(new AddRoomListener(roomInfoMap));
+//        server.addListener(new ExitMessageListener(connects,roomInfoMap));
+//        server.addListener(new CreateRoomListener(roomInfoMap));
+//        server.addListener(new RoomListMessageListener(roomInfoMap));
+//        server.addListener(new ActiveRoomMessageListener(roomInfoMap));
+//        server.addListener(new AddRoomListener(roomInfoMap));
+//        server.addListener(new ExitRoomListener(roomInfoMap));
     }
 
     @Override

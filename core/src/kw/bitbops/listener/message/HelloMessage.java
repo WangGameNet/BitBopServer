@@ -2,7 +2,7 @@ package kw.bitbops.listener.message;
 
 import kw.test.bean.BaseMessage;
 
-public class HelloMessage implements BaseMessage {
+public class HelloMessage extends BaseMessage {
     private int id;
     private String msg;
 

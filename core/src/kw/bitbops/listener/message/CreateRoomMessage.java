@@ -2,7 +2,7 @@ package kw.bitbops.listener.message;
 
 import kw.test.bean.BaseMessage;
 
-public class CreateRoomMessage implements BaseMessage {
+public class CreateRoomMessage extends BaseMessage {
     private String id;
     private String name;
 

@@ -10,6 +10,7 @@ public class ServerListener <T extends BaseMessage> extends AbstractListener<T> 
     public ServerListener(Class clazz) {
         super(clazz);
         this.server = TypeWorldServer.getTypeWorldServer();
+        server.register(clazz);
     }
 
 

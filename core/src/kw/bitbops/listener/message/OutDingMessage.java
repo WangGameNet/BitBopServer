@@ -2,7 +2,7 @@ package kw.bitbops.listener.message;
 
 import kw.test.bean.BaseMessage;
 
-public class OutDingMessage implements BaseMessage {
+public class OutDingMessage extends BaseMessage {
     private int id;
     private float pox;
     private float poy;

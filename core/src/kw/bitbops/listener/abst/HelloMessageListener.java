@@ -7,6 +7,7 @@ import com.kw.gdx.utils.log.NLog;
 import kw.bitbops.bean.UserInfo;
 import kw.bitbops.listener.message.HelloMessage;
 import kw.test.listener.ServerListener;
+import kw.test.server.TypeWorldServer;
 
 /**
  * 发送hello的用户的链接存储起来
@@ -27,20 +28,8 @@ public class HelloMessageListener extends ServerListener<HelloMessage> {
         HelloMessage message = new HelloMessage();
         message.setId(conncetion.getID());
         message.setMsg("注册成功！");
-        sendTcp(message.getId(),message);
+        sendUdp(conncetion.getID(),message);
         NLog.i("register success :"+message.toString());
     }
 
-    @Override
-    public void disconnected(Connection connection) {
-        super.disconnected(connection);
-        UserInfo userInfo = null;
-        for (UserInfo connect : connects) {
-            if (connect.getId() == connection.getID()) {
-                userInfo = connect;
-                break;
-            }
-        }
-        connects.removeValue(userInfo,false);
-    }
 }

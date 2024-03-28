@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import kw.bitbops.bean.RoomInfo;
 import kw.test.bean.BaseMessage;
 
-public class RoomListMessage implements BaseMessage {
+public class RoomListMessage extends BaseMessage {
     private Array<RoomInfo> array;
 
     public RoomListMessage(){
