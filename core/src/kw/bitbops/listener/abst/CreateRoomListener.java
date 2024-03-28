@@ -1,14 +1,13 @@
 package kw.bitbops.listener.abst;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.esotericsoftware.kryonet.Connection;
 import com.kw.gdx.utils.log.NLog;
 
 import kw.bitbops.bean.RoomInfo;
-import kw.bitbops.listener.AbstractListener;
+import kw.test.listener.ServerListener;
 
-public class CreateRoomListener extends AbstractListener<RoomInfo> {
+public class CreateRoomListener extends ServerListener<RoomInfo> {
     private ArrayMap<Integer,RoomInfo> arrayMap;
     public CreateRoomListener(ArrayMap<Integer, RoomInfo> arrayMap) {
         super(RoomInfo.class);
@@ -24,6 +23,7 @@ public class CreateRoomListener extends AbstractListener<RoomInfo> {
         sendUdp(conncetion.getID(),info);
         arrayMap.put(info.getAdmin(),info);
     }
+
 
     @Override
     public void disconnected(Connection connection) {

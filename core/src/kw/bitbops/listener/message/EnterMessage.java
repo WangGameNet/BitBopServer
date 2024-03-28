@@ -1,6 +1,8 @@
 package kw.bitbops.listener.message;
 
-public class EnterMessage {
+import kw.test.bean.BaseMessage;
+
+public class EnterMessage implements BaseMessage {
     private int id;
 
     public int getId() {

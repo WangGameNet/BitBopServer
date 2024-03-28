@@ -1,6 +1,8 @@
 package kw.bitbops.listener.message;
 
-public class AddRoomMessage extends BaseMessage{
+import kw.test.bean.BaseMessage;
+
+public class AddRoomMessage implements BaseMessage {
     private int room;
     private String msg;
 

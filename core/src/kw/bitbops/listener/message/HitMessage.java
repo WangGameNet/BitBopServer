@@ -1,5 +1,7 @@
 package kw.bitbops.listener.message;
 
-public class HitMessage {
+import kw.test.bean.BaseMessage;
+
+public class HitMessage implements BaseMessage {
 
 }

@@ -5,8 +5,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.kw.gdx.utils.log.NLog;
 
 import kw.bitbops.bean.RoomInfo;
-import kw.bitbops.listener.AbstractListener;
 import kw.bitbops.listener.message.ActiveRoomMessage;
+import kw.test.listener.AbstractListener;
 
 /**
  * 用户创建完之后，但是它可以不用，所以我加入一个激活功能，也就是用户创建完成之后等待用户加入

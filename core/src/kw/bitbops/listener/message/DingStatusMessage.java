@@ -1,6 +1,8 @@
 package kw.bitbops.listener.message;
 
-public class DingStatusMessage {
+import kw.test.bean.BaseMessage;
+
+public class DingStatusMessage implements BaseMessage {
     private int dingID;
     private int status;  //0 直立  1.左歪  2.右歪 3，打中
     private float pox;

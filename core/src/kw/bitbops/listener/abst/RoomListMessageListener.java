@@ -5,10 +5,11 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryonet.Connection;
 
 import kw.bitbops.bean.RoomInfo;
-import kw.bitbops.listener.AbstractListener;
 import kw.bitbops.listener.message.RoomListMessage;
+import kw.test.listener.AbstractListener;
+import kw.test.listener.ServerListener;
 
-public class RoomListMessageListener extends AbstractListener<RoomListMessage> {
+public class RoomListMessageListener extends ServerListener<RoomListMessage> {
 
     private ArrayMap<Integer,RoomInfo> roomInfoArrayMap;
     public RoomListMessageListener(ArrayMap<Integer, RoomInfo> roomInfoMap) {

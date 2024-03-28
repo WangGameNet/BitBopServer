@@ -1,10 +1,8 @@
 package kw.bitbops.bean;
 
-import com.esotericsoftware.kryonet.Connection;
+import kw.test.bean.BaseMessage;
 
-import kw.bitbops.listener.message.BaseMessage;
-
-public class RoomInfo extends BaseMessage {
+public class RoomInfo implements BaseMessage {
     private String roomName;
     private int admin;
     private int other;

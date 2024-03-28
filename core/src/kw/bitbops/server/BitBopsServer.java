@@ -1,13 +1,10 @@
 package kw.bitbops.server;
 
 import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 
 import kw.bitbops.bean.RoomInfo;
-import kw.bitbops.listener.AbstractListener;
 import kw.bitbops.listener.message.CreateRoomMessage;
 import kw.bitbops.listener.message.DingStatusMessage;
 import kw.bitbops.listener.message.EnterMessage;
@@ -16,6 +13,7 @@ import kw.bitbops.listener.message.HelloMessage;
 import kw.bitbops.listener.message.HitDingMessage;
 import kw.bitbops.listener.message.OutDingMessage;
 import kw.bitbops.listener.message.RoomListMessage;
+import kw.test.listener.AbstractListener;
 
 public class BitBopsServer {
     private static final int TCP_PORT = 1234;
@@ -46,34 +44,11 @@ public class BitBopsServer {
 
     public void addListener(AbstractListener listener){
         server.addListener(listener);
-        listener.setServer(server);
     }
 
 
     public void update() {
 
-
-//        UserInfo temp = null;
-//        for (Connection connection : lostConnect) {
-//            for (UserInfo info : userInfoBeanArray) {
-//                if (info.getConnection() == connection) {
-//                    temp = info;
-//                    break;
-//                }
-//            }
-//        }
-//        userInfoBeanArray.remove(temp);
-//        //move
-//        logic.update(Gdx.graphics.getDeltaTime());
-//        Array<DingStatusMessage> array = logic.genSendMessage();
-//        for (UserInfo info : userInfoBeanArray) {
-//            sendUDP(info.getConnection(),array);
-//        }
-//        logic.removeUnless();
     }
 
-
-    private void sendUDP(Connection connection, Object object) {
-        server.sendToUDP(connection.getID(),object);
-    }
 }

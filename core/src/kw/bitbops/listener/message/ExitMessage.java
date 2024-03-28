@@ -1,6 +1,8 @@
 package kw.bitbops.listener.message;
 
-public class ExitMessage {
+import kw.test.bean.BaseMessage;
+
+public class ExitMessage implements BaseMessage {
     private int id;
 
     public int getId() {

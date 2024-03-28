@@ -1,11 +1,11 @@
 package kw.bitbops.listener.message;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.compression.lzma.Base;
 
 import kw.bitbops.bean.RoomInfo;
+import kw.test.bean.BaseMessage;
 
-public class RoomListMessage extends BaseMessage {
+public class RoomListMessage implements BaseMessage {
     private Array<RoomInfo> array;
 
     public RoomListMessage(){

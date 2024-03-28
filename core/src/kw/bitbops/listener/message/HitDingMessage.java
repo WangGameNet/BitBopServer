@@ -1,5 +1,7 @@
 package kw.bitbops.listener.message;
 
-public class HitDingMessage {
+import kw.test.bean.BaseMessage;
+
+public class HitDingMessage implements BaseMessage {
 
 }

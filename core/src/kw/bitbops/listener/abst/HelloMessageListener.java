@@ -5,14 +5,14 @@ import com.esotericsoftware.kryonet.Connection;
 import com.kw.gdx.utils.log.NLog;
 
 import kw.bitbops.bean.UserInfo;
-import kw.bitbops.listener.AbstractListener;
 import kw.bitbops.listener.message.HelloMessage;
+import kw.test.listener.ServerListener;
 
 /**
  * 发送hello的用户的链接存储起来
  * 发送exit的链接删除
  */
-public class HelloMessageListener extends AbstractListener<HelloMessage> {
+public class HelloMessageListener extends ServerListener<HelloMessage> {
     private Array<UserInfo> connects;
     public HelloMessageListener(Array<UserInfo> connects) {
         super(HelloMessage.class);
@@ -27,7 +27,7 @@ public class HelloMessageListener extends AbstractListener<HelloMessage> {
         HelloMessage message = new HelloMessage();
         message.setId(conncetion.getID());
         message.setMsg("注册成功！");
-        sendTcp(connectid,message);
+        sendTcp(message.getId(),message);
         NLog.i("register success :"+message.toString());
     }
 
