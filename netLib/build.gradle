@@ -1,0 +1,16 @@
+apply plugin: "java"
+
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+dependencies {
+    compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+    // libGdx源码
+    implementation 'com.github.wangGame.LibGdxTool:libGdx:release1.0.1'
+    //自己的工具包
+    implementation 'com.github.wangGame.LibGdxTool:libGdxLib:release1.0.1'
+}
