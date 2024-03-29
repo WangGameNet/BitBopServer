@@ -6,13 +6,13 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.kw.gdx.utils.log.NLog;
 
 import kw.bitbops.bean.UserInfo;
-import kw.bitbops.listener.abst.AddRoomListener;
+import kw.bitbops.listener.abst.JoinRoomMessageListener;
 import kw.bitbops.listener.abst.CreateRoomListener;
 import kw.bitbops.listener.abst.DeleteRoomListener;
 import kw.bitbops.listener.abst.ExitMessageListener;
 import kw.bitbops.listener.abst.HelloMessageListener;
 import kw.bitbops.listener.abst.RoomListMessageListener;
-import kw.bitbops.listener.message.AddRoomMessage;
+import kw.bitbops.listener.message.JoinRoomMessage;
 import kw.bitbops.listener.message.DeleteRoomMessage;
 import kw.bitbops.listener.message.ExitMessage;
 import kw.bitbops.listener.message.HelloMessage;
@@ -42,14 +42,16 @@ public class BitbopsGame extends Game {
         server.register(RoomInfoMessage.class);
         server.register(RoomListMessage.class);
         server.register(DeleteRoomMessage.class);
-        server.register(AddRoomMessage.class);
+        server.register(JoinRoomMessage.class);
 
         server.addListener(new HelloMessageListener(connects));
         server.addListener(new ExitMessageListener(connects,roomInfoMap));
+
         server.addListener(new CreateRoomListener(connects,roomInfoMap));
         server.addListener(new RoomListMessageListener(connects,roomInfoMap));
         server.addListener(new DeleteRoomListener(roomInfoMap));
-        server.addListener(new AddRoomListener(roomInfoMap));
+        server.addListener(new JoinRoomMessageListener(roomInfoMap));
+
     }
 
     @Override

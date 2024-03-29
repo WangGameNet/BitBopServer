@@ -2,9 +2,18 @@ package kw.bitbops.listener.message;
 
 import kw.test.bean.BaseMessage;
 
-public class AddRoomMessage extends BaseMessage {
+public class JoinRoomMessage extends BaseMessage {
     private int tarConnectId;
     private int fromConnectId;
+    private int code;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public int getTarConnectId() {
         return tarConnectId;
