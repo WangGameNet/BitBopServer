@@ -16,7 +16,7 @@ public class JoinRoomMessageListener extends ServerListener<JoinRoomMessage> {
 
     @Override
     public void accept(Connection conncetion, JoinRoomMessage elem) {
-        RoomInfoMessage message = roomInfoMap.get(elem.getTarConnectId());
+        RoomInfoMessage message = roomInfoMap.get(elem.getRoomId());
         message.setOther(conncetion.getID());
         elem.setCode(200);
         sendUdp(message.getAdmin(),elem);
