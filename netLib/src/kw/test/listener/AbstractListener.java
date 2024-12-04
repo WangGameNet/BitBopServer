@@ -16,6 +16,7 @@ public abstract class AbstractListener<T extends BaseMessage> extends Listener i
     @Override
     public void received(Connection connection, Object object) {
         super.received(connection, object);
+        System.out.println("----------------------------");
         if (object.getClass().equals(clazz)){
             accept(connection, (T) object);
         }

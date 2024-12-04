@@ -24,6 +24,9 @@ public class HelloMessageListener extends ServerListener<HelloMessage> {
     public void accept(Connection conncetion, HelloMessage elem) {
         NLog.i("hello message "+elem.toString());
         UserInfo userInfo = new UserInfo(conncetion,conncetion.getID());
+        if (connects.contains(userInfo,false)) {
+            return;
+        }
         connects.add(userInfo);
         HelloMessage message = new HelloMessage();
         message.setId(conncetion.getID());

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 import kw.bitbops.bean.UserInfo;
+import kw.bitbops.listener.abst.DisConnectMessageListener;
 import kw.bitbops.listener.abst.JoinRoomMessageListener;
 import kw.bitbops.listener.abst.CreateRoomListener;
 import kw.bitbops.listener.abst.DeleteRoomListener;
@@ -59,6 +60,7 @@ public class BitbopsGame extends Game {
         server.addListener(new DeleteRoomListener(roomInfoMap));
         server.addListener(new JoinRoomMessageListener(roomInfoMap));
         server.addListener(new LevelRoomMessageListener(roomInfoMap));
+        server.addListener(new DisConnectMessageListener());
 
     }
 
